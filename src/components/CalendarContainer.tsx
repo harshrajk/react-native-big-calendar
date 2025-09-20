@@ -8,6 +8,7 @@ import type {
   AllDayEventCellStyle,
   CalendarCellStyle,
   CalendarCellTextStyle,
+  CellRenderer,
   DateRangeHandler,
   EventCellStyle,
   EventRenderer,
@@ -89,6 +90,7 @@ export interface CalendarContainerProps<T extends ICalendarEventBase> {
   renderHeader?: HeaderRenderer<T>
   renderHeaderForMonthView?: MonthHeaderRenderer
   renderCustomDateForMonth?: (date: Date) => React.ReactElement | null
+  renderCell?: CellRenderer<T>
 
   ampm?: boolean
   date?: Date
@@ -223,6 +225,7 @@ function _CalendarContainer<T extends ICalendarEventBase>({
   weekNumberPrefix = '',
   onPressMoreLabel,
   renderCustomDateForMonth,
+  renderCell,
   disableMonthEventCellPress = false,
   showVerticalScrollIndicator = false,
   verticalScrollEnabled = true,
@@ -404,6 +407,7 @@ function _CalendarContainer<T extends ICalendarEventBase>({
               moreLabel={moreLabel}
               onPressMoreLabel={onPressMoreLabel}
               renderCustomDateForMonth={renderCustomDateForMonth}
+              renderCell={renderCell}
               disableMonthEventCellPress={disableMonthEventCellPress}
             />
           </React.Fragment>

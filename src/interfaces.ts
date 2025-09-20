@@ -63,3 +63,13 @@ export type HeaderRenderer<T extends ICalendarEventBase> = React.ComponentType<
 export type MonthHeaderRenderer = React.ComponentType<CalendarHeaderForMonthViewProps>
 
 export type HourRenderer = React.ComponentType<{ ampm: boolean; hour: number }>
+
+export type CellRenderer<T extends ICalendarEventBase = ICalendarEventBase> = (
+  date: Date,
+  events: T[],
+  options: {
+    isToday: boolean
+    isCurrentMonth: boolean
+    index: number
+  },
+) => JSX.Element

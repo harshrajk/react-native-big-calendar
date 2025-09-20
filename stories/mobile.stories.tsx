@@ -3,7 +3,13 @@ import dayjs from 'dayjs'
 import React from 'react'
 import { Alert, Text, TouchableOpacity, View } from 'react-native'
 
-import { Calendar, type EventRenderer, type HasDateRange, type ICalendarEventBase } from '../src'
+import {
+  Calendar,
+  type CellRenderer,
+  type EventRenderer,
+  type HasDateRange,
+  type ICalendarEventBase,
+} from '../src'
 import { AppHeader, HEADER_HEIGHT } from './components/AppHeader'
 import { events, tonsOfEvents, tonsOfEventsSorted } from './events'
 import { useEvents } from './hooks'
@@ -291,6 +297,112 @@ export const MonthCalendarCellCustomDateRenderer: Story = {
         events={events}
         mode="month"
         renderCustomDateForMonth={renderCustomDate}
+      />
+    )
+  },
+}
+
+export const MonthCalendarCellWithPrices: Story = {
+  render: () => {
+    // Sample price data per day
+    const prices = {
+      1: 120,
+      2: 95,
+      3: 180,
+      4: 220,
+      5: 150,
+      6: 85,
+      7: 300,
+      8: 175,
+      9: 90,
+      10: 250,
+      11: 190,
+      12: 110,
+      13: 275,
+      14: 160,
+      15: 200,
+      16: 85,
+      17: 320,
+      18: 145,
+      19: 195,
+      20: 130,
+      21: 280,
+      22: 165,
+      23: 210,
+      24: 95,
+      25: 350,
+      26: 125,
+      27: 185,
+      28: 240,
+      29: 155,
+      30: 290,
+      31: 170,
+    }
+
+    const renderCell: CellRenderer<ICalendarEventBase> = (
+      date,
+      events,
+      { isToday, isCurrentMonth },
+    ) => {
+      const dayOfMonth = date.getDate()
+      const price = prices[dayOfMonth as keyof typeof prices] || 0
+      const hasEvents = events.length > 0
+
+      return (
+        <View style={{ flex: 1, padding: 4 }}>
+          {/* Date and Price */}
+          <View style={{ alignItems: 'center', marginBottom: 4 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: isToday ? 'bold' : 'normal',
+                color: isCurrentMonth ? (isToday ? '#007AFF' : '#000') : '#999',
+              }}
+            >
+              {dayOfMonth}
+            </Text>
+            {isCurrentMonth && (
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: price > 200 ? '#FF3B30' : price > 150 ? '#FF9500' : '#34C759',
+                  fontWeight: '600',
+                }}
+              >
+                ${price}
+              </Text>
+            )}
+          </View>
+
+          {/* Events indicator */}
+          {hasEvents && (
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 2,
+                right: 2,
+                width: 6,
+                height: 6,
+                borderRadius: 3,
+                backgroundColor: '#007AFF',
+              }}
+            />
+          )}
+        </View>
+      )
+    }
+
+    return (
+      <Calendar
+        height={MOBILE_HEIGHT}
+        events={events}
+        mode="month"
+        renderCell={renderCell}
+        onPressCell={(date) => {
+          const dayOfMonth = date.getDate()
+          const price = prices[dayOfMonth as keyof typeof prices] || 0
+          alert(`Clicked on ${date.toLocaleDateString()} - Price: $${price}`)
+        }}
       />
     )
   },
